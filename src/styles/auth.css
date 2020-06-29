@@ -1,0 +1,34 @@
+@media only screen and (max-width: 600px) {
+    .banner {
+        display: none;
+    }
+  }
+.banner {
+    position: fixed;
+    background: url('/img/mollie-sivaram-_1gBVgy8gIU-unsplash.png');
+    background-position: center;
+    background-size: cover;
+    width: 800px;
+    height: 100vh;
+    left: 0px;
+    top: 0px;
+}
+h1.title {
+    font-size: 56px !important;
+    line-height: 83px !important;
+
+    color: #F9F9F9 !important;
+}
+h1.title-login{
+    position: absolute;
+    width: 354px;
+    height: 138px;
+    left: 960px;
+    top: 207px;
+
+    font-family: Airbnb Cereal App;
+    font-size: 64px;
+    line-height: 83px;
+
+    color: #424242;
+}
