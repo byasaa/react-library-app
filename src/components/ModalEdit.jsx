@@ -1,26 +1,30 @@
-import React from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
+import React, {Component} from 'react'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
+Form, FormGroup, Label, Input,FormText } from 'reactstrap';
 
-const Modals = (props) => {
+class ModalEdit extends Component {
+    state = { 
+
+     }
+    render() {
         const {
-          className,
-          modalShow,
-          toggle
-        } = props;
-      
+            className,
+            modalEditShow,
+            toggle
+          } = this.props;
         return (
-            <div>
-              <Modal isOpen={modalShow} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+            <>
+            <Modal isOpen={modalEditShow} toggle={toggle} className={className} >
+                <ModalHeader toggle={toggle}>Edit Book</ModalHeader>
                 <ModalBody>
-                <Form>
+                  <Form>
                       <FormGroup>
                           <Label>Title</Label>
                           <Input type='text' placeholder='Title' />
                       </FormGroup>
                       <FormGroup>
                           <Label>Description</Label>
-                          <Input type='textarea' placeholder='Title' />
+                          <Input type='text' placeholder='Title' />
                       </FormGroup>
                       <FormGroup>
                       <Label>Author</Label>
@@ -51,15 +55,15 @@ const Modals = (props) => {
                         </FormText>
                     </FormGroup>
                   </Form>
-                
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+                  <Button color="primary" onClick={toggle}>Update</Button>{' '}
                   <Button color="secondary" onClick={toggle}>Cancel</Button>
                 </ModalFooter>
               </Modal>
-            </div>
-          );
+            </>
+        )
+    }
 }
 
-export default Modals
+export default ModalEdit
