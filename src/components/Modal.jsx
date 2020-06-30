@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
 
 class Modals extends Component {
        constructor(props){
@@ -64,9 +64,6 @@ class Modals extends Component {
         formData.append('genre_id', this.state.genre)
         formData.append('image', this.state.image[0])
         formData.append('book_status', this.state.book_status)
-
-        console.log(this.state.genre)
-        console.log(this.state.author)
         axios({
           method : "POST",
           url : process.env.REACT_APP_API_URL + 'books/',
@@ -78,6 +75,7 @@ class Modals extends Component {
         })
         .then((res) => {
           console.log(res)
+          
         })
         .catch((err) => {
           console.log(err)
@@ -136,11 +134,7 @@ class Modals extends Component {
                   </FormGroup>
                 <Button color="primary" >Create</Button>{' '}
                 </Form>
-              
               </ModalBody>
-              <ModalFooter>
-                <Button color="secondary" onClick={toggle}>Cancel</Button>
-              </ModalFooter>
             </Modal>
           </div>
         );

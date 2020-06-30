@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Swal from "sweetalert2"
 import { Link } from "react-router-dom";
 import {Nav, NavItem, NavLink} from 'reactstrap'
 import "../styles/layout.css"
@@ -13,6 +14,22 @@ const Sidebar = (props) => {
     const handleLogout = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('refreshToken')
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: 'Logout successfully'
+          })
     }
     return(
         <>

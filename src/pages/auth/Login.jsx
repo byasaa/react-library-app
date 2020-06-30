@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import "../../styles/auth.css"
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import { Col, Row, Container, Form, FormGroup, Input, Label, Button } from "reactstrap"
 import { Link } from "react-router-dom"
 class Login extends Component {
@@ -25,6 +26,22 @@ class Login extends Component {
             console.log(res)
             localStorage.setItem('token', res.data.data[0].token)
             localStorage.setItem('refreshToken', res.data.data[0].refreshToken)
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              
+              Toast.fire({
+                icon: 'success',
+                title: 'Signed in successfully'
+              })
             this.props.history.push('/')
         })
         .catch((err) => {
