@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 import '@trendmicro/react-sidenav/dist/react-sidenav.min.css';
-import Modals from "./Modal"
+import Modals from "../components/Modal"
 
 const Sidebar = () => {
     const [modalShow, setModalShow] = useState(false);

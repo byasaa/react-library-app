@@ -25,6 +25,7 @@ class Login extends Component {
             console.log(res)
             localStorage.setItem('token', res.data.data[0].token)
             localStorage.setItem('refreshToken', res.data.data[0].refreshToken)
+            this.props.history.push('/')
         })
         .catch((err) => {
             console.log(err)
@@ -46,11 +47,11 @@ class Login extends Component {
                             <Form onSubmit={this.loginUser}>
                                 <FormGroup>
                                     <Label>Username</Label>
-                                <Input placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
+                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label>Password</Label>
-                                    <Input placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
+                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
                                 </FormGroup> 
                                 <Button color="secondary">Login</Button>{' '}
                                 <Link to='/register'>

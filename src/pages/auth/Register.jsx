@@ -40,11 +40,11 @@ class Register extends Component {
                             <Form onSubmit={this.regUser} >
                                <FormGroup>
                                     <Label>Username</Label>
-                                <Input placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
+                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label>Password</Label>
-                                    <Input placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
+                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
                                 </FormGroup> 
                                 <Button color="secondary">Sign Up</Button>{' '}
                                 <Link to='/login'>

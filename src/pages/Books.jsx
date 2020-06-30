@@ -40,7 +40,7 @@ class Books extends Component {
                 this.state.books.map((book) => {
                     return <Col key={book.id} md={3}>
                     <Card>
-                        <CardImg top width="100%" src={`http://localhost:3000/img/${book.image}`} alt={`${book.title}`} />
+                        <CardImg top width="100%" src={`http://localhost:3000/api/img/${book.image}`} alt={`${book.title}`} />
                         <CardBody>
                             <CardTitle>{book.title}</CardTitle>
                             <CardText> {book.description} </CardText>
