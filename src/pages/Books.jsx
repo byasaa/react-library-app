@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom';
 import axios from 'axios'
+import QueryString from "query-string"
 import {Col, Card, CardImg, CardBody} from "reactstrap"
 
 class Books extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             books : []
         }
     }
     getAllBook = () => {
+        let qs = QueryString.parse(this.props.location.search)
+        let search = qs.search || ""
+        let limit = qs.limit || ""
         const token = localStorage.getItem('token')
         axios({
             method : 'GET',
-            url: 'http://localhost:3000/api/books',
+            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}`,
             headers : {
                 Authorization : token
             }
