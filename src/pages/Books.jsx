@@ -2,23 +2,25 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom';
 import axios from 'axios'
 import QueryString from "query-string"
-import {Col, Card, CardImg, CardBody} from "reactstrap"
+import {Col, Card, CardImg, CardBody, Button,Row} from "reactstrap"
 
 class Books extends Component {
     constructor(props){
         super(props)
         this.state = {
-            books : []
+            books : [],
+            page : 1
         }
     }
     getAllBook = () => {
         let qs = QueryString.parse(this.props.location.search)
         let search = qs.search || ""
         let limit = qs.limit || ""
+        let page = qs.page || ""
         const token = localStorage.getItem('token')
         axios({
             method : 'GET',
-            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}`,
+            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}&page=${page}`,
             headers : {
                 Authorization : token
             }
@@ -33,10 +35,28 @@ class Books extends Component {
             console.log(err)
         })
     }
+//     nextPage = (e) => {
+//         let qs = QueryString.parse(this.props.location.search)
+//         e.preventDefault()
+//         this.setState({
+//             page: +qs.page + 1
+//         })
+//         window.location.replace(`/?page=${this.state.page}`)
+//     }
+//    prevPage = (e) => {
+//     let qs = QueryString.parse(this.props.location.search)
+//         e.preventDefault()
+//         this.setState({
+//             page: +qs.page - 1
+//         })
+//         window.location.replace(`/?page=${this.state.page}`)
+//     }
     componentDidMount(){
         this.getAllBook()
     }
     render(){
+        let qs = QueryString.parse(this.props.location.search)
+        let disableButton = qs.page == 1 ? true : false
         return(
             <>
             {
@@ -55,6 +75,10 @@ class Books extends Component {
                 </Col>
                 })
             }
+                <Col md={12}>
+                    <Button color="warning" disabled={disableButton} className="mr-auto" onClick={() => window.location.replace(`/?page=${+qs.page-1}`)}>Prev</Button>{"  "}
+                    <Button color="warning" className="ml-auto" onClick={() => window.location.replace(`/?page=${+qs.page+1}`)}> Next</Button>
+                </Col>
             </>
         )
     }

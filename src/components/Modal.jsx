@@ -30,7 +30,6 @@ class Modals extends Component {
             this.setState({
               authors : res.data.data
             })
-            console.log(res)
           })
           .catch((err) => {
             console.log(err)
@@ -49,7 +48,6 @@ class Modals extends Component {
           this.setState({
             genres : res.data.data
           })
-          console.log(res)
         })
         .catch((err) => {
           console.log(err)

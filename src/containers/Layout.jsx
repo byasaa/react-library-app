@@ -7,8 +7,7 @@ import {
 import {Container, Col, Row} from 'reactstrap'
 import "../styles/layout.css"
 
-const Layout = () => {
-
+const Layout = (props) => {
   return (
     <>
       <Container fluid>
@@ -17,9 +16,9 @@ const Layout = () => {
           <Sidebar/>
         </Col>
         <Col md={9} id="page-content-wrapper">
-            <Navbar />
+            <Navbar {...props} />
             <div className="body">
-              <Content />
+              <Content {...props} />
             </div>
           </Col>
         </Row>

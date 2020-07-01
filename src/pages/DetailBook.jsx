@@ -26,11 +26,9 @@ class DetailBook extends Component {
             }
         })
         .then((res) => {
-            console.log(res)
             this.setState({
                 book : res.data.data[0]
             })
-            console.log(this.state)
         })
         .catch((err) => {
             console.log(err)
@@ -56,7 +54,6 @@ class DetailBook extends Component {
                       Authorization : token
                   }
               }).then((res)=>{
-                console.log(res)
                 Swal.fire(
                     'Deleted!',
                     `The Book With id = ${res.data.data.id} deleted.`,
@@ -78,8 +75,7 @@ class DetailBook extends Component {
             headers : {
                 Authorization : token
             }
-        }).then((res) => {
-            console.log(res)
+        }).then(() => {
             window.location.reload()
         }).catch((err) => {
             console.log(err)
@@ -99,7 +95,6 @@ class DetailBook extends Component {
             }
         })
         .then((res) => {
-            console.log(res)
             this.setState({
                 loan : res.data.data[0]
             })
@@ -118,8 +113,7 @@ class DetailBook extends Component {
             headers : {
                 Authorization : token
             }
-        }).then((res) => {
-            console.log(res)
+        }).then(() => {
             window.location.reload()
         }).catch((err) => {
             console.log(err)

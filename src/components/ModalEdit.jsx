@@ -94,13 +94,11 @@ class ModalEdit extends Component {
    componentDidMount(){
      this.getAuthor()
      this.getGenre()
-     this.setState({
-      title : "",
-      description : "",
-      author : "",
-      genre : "",
-      image : "",
-      book_status : "",
+   }
+   componentWillMount(){
+    console.log('will')
+    this.setState({
+      ...this.props.data
      })
    }
     render() {
@@ -144,10 +142,6 @@ class ModalEdit extends Component {
                     <FormGroup>
                       <Label>Image</Label>
                       <Input type="file" name="file" onChange={(e) => this.setState({image: e.target.files})}/>
-                      <FormText color="muted">
-                      This is some placeholder block-level help text for the above input.
-                      It's a bit lighter and easily wraps to a new line.
-                      </FormText>
                   </FormGroup>
                 <Button color="primary" >Update</Button>{' '}
                 </Form>

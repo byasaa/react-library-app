@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import "../../styles/auth.css"
 import axios from 'axios'
+import Swal from "sweetalert2"
 import { Col, Row, Container, Form, FormGroup, Input, Label, Button } from "reactstrap"
 import { Link } from "react-router-dom"
 class Register extends Component {
@@ -20,8 +21,12 @@ class Register extends Component {
                 username: this.state.username,
                 password : this.state.password
             }
-        }).then((res) => {
-            console.log(res)
+        }).then(() => {
+            Swal.fire(
+                'Register Success!',
+                `Please Login`,
+                'success'
+              ).then(() => this.props.history.push('/login'))
         }).catch((err) => {
             console.log(err)
         })

@@ -42,9 +42,11 @@ const Sidebar = (props) => {
                             (<span> {localStorage.getItem('role')} </span>)
                         </DropdownToggle>
                             <DropdownMenu>
+                            <Link to='/login' onClick={handleLogout} >
                                 <DropdownItem>
-                                    <Link to='/login' onClick={handleLogout} >Logout</Link>
+                                    Logout
                                 </DropdownItem>
+                                </Link>
                             </DropdownMenu>
                     </UncontrolledDropdown>
                 </div>
