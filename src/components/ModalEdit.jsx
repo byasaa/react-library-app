@@ -149,7 +149,7 @@ class ModalEdit extends Component {
                       It's a bit lighter and easily wraps to a new line.
                       </FormText>
                   </FormGroup>
-                <Button color="primary" >Create</Button>{' '}
+                <Button color="primary" >Update</Button>{' '}
                 </Form>
               </ModalBody>
               </Modal>

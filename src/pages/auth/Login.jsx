@@ -26,6 +26,9 @@ class Login extends Component {
             console.log(res)
             localStorage.setItem('token', res.data.data[0].token)
             localStorage.setItem('refreshToken', res.data.data[0].refreshToken)
+            localStorage.setItem('username' , res.data.data[0].username)
+            localStorage.setItem('role' , res.data.data[0].role)
+            localStorage.setItem('id' , res.data.data[0].id)
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',

@@ -10,6 +10,7 @@ class DetailBook extends Component {
         super(props)
         this.state = {
             book : [],
+            loan : [],
             showModalUpdate : false,
             showModalDelete : false,
             showModalLoan : false
@@ -84,13 +85,56 @@ class DetailBook extends Component {
             console.log(err)
         })
     }
+    backButton = (e) => {
+        e.preventDefault()
+        window.history.back()
+    }
+    getLoanBook = () => {
+        const token = localStorage.getItem('token')
+        axios({
+            method : "GET",
+            url : process.env.REACT_APP_API_URL + 'loans/book/' + this.props.match.params.id,
+            headers : {
+                Authorization : token
+            }
+        })
+        .then((res) => {
+            console.log(res)
+            this.setState({
+                loan : res.data.data[0]
+            })
+            console.log(this.state)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+    handleReturnBook = (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('token')
+        axios({
+            method: "PATCH",
+            url: process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id + "/return",
+            headers : {
+                Authorization : token
+            }
+        }).then((res) => {
+            console.log(res)
+            window.location.reload()
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
     componentDidMount(){
      this.getDetailBook()  
+     this.getLoanBook()
     }
     render() {
         const toggleEdit = () => this.setState({showModalUpdate: !this.state.showModalUpdate})
         let disabledButton = this.state.book.status === "Available" ? false : true
         let classStatus = this.state.book.status === "Available" ? 'text-success' : 'text-danger'
+        const user_id = localStorage.getItem('id')
+        const role = localStorage.getItem('role')
         // const {title, description, created_at, image, status} = this.state.book
         const formatDate = date => {
             let data = Date.parse(date);
@@ -130,6 +174,14 @@ class DetailBook extends Component {
             <Container fluid>
             <div style={cover}>
                     <Navbar expand="md">
+                        <Nav className="mr-auto">
+                            <NavItem className="mr-3">
+                                <Button outline color="warning" onClick={this.backButton}>
+                                    Back
+                                </Button>
+                            </NavItem>
+                        </Nav>
+                        {role == 'admin' ? 
                         <Nav className="ml-auto" navbar sty>
                         <NavItem className="mr-3">
                              <Button outline color="warning" onClick={toggleEdit}>Edit</Button>
@@ -137,10 +189,16 @@ class DetailBook extends Component {
                         <NavItem>
                             <Button outline color="warning" onClick={this.handleDeleteBook}>Delete</Button>
                         </NavItem>
-                        </Nav>
+                        </Nav> : false
+                        }
                     </Navbar>
                 <div style={coverMini}></div>
+                    {this.state.book.status == "Available" ? <Button color="warning" size="lg" disabled={disabledButton} onClick={this.handleBorrowBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button> : this.state.loan.user_id == user_id ? 
+                    <Button color="primary" size="lg" onClick={this.handleReturnBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Return</Button>
+                    : 
                     <Button color="warning" size="lg" disabled={disabledButton} onClick={this.handleBorrowBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button>
+                    }
+
                 <Container>
                 <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>Novel</div>
                 <p className={classStatus} style={{ position : 'absolute',

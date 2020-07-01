@@ -21,7 +21,6 @@ class Books extends Component {
 
         })
         .then((res)=>{
-            console.log(res)
             this.setState({
                 books: res.data.data
             })
@@ -38,7 +37,7 @@ class Books extends Component {
             <>
             {
                 this.state.books.map((book) => {
-                    return <Col key={book.id} lg={3} md={6} className="mb-4 mb-lg-0" >
+                    return <Col key={book.id} lg={3} md={6} className="mt-3 mb-4 mb-lg-0" >
                     <Card className="shadow-sm border-0 rounded" >
                         <CardBody className="p-0" >
                         <CardImg src={`${process.env.REACT_APP_API_URL}img/${book.image}`} alt={`${book.title}`} />

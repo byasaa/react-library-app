@@ -78,10 +78,9 @@ class Modals extends Component {
           console.log(res)
           Swal.fire(
             'Insert Book Success!',
-            `With id = ${res.data.data[0].id}`,
+            `With id = ${res.data.data.id}`,
             'success'
-          )
-          this.props.history.push('/')  
+          ).then(() => window.location.reload())
         })
         .catch((err) => {
           console.log(err)

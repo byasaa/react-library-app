@@ -5,7 +5,7 @@ import Carousel from "../components/Carousel";
 function Content () {
     return (
         <main className="content">
-            <Carousel />
+            {/* <Carousel /> */}
             <h4 className="mt-3" >List Book</h4>
             <Row>
                 <Books />

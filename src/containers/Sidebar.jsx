@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import Swal from "sweetalert2"
 import { Link } from "react-router-dom";
-import {Nav, NavItem, NavLink} from 'reactstrap'
+import {Nav, NavItem, NavLink, UncontrolledDropdown,
+    DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import "../styles/layout.css"
 import {Modals} from './index'
 
@@ -12,8 +13,7 @@ const Sidebar = (props) => {
         setModalShow(!modalShow)
     }
     const handleLogout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('refreshToken')
+        localStorage.clear()
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -36,7 +36,17 @@ const Sidebar = (props) => {
             <Nav className="col-md-12 d-none d-lg-block bg-light sidebar">
                 <div className="user-profile sidebar-heading">
                     <img src="logo512.png" alt="user"/>
-                    <h4>USER </h4> <Link to='/login' onClick={handleLogout} >Logout</Link>
+                    <UncontrolledDropdown nav inNavbar>
+                        <DropdownToggle nav caret>
+                            {localStorage.getItem('username')}
+                            (<span> {localStorage.getItem('role')} </span>)
+                        </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem>
+                                    <Link to='/login' onClick={handleLogout} >Logout</Link>
+                                </DropdownItem>
+                            </DropdownMenu>
+                    </UncontrolledDropdown>
                 </div>
                 <div className="container">
                     <NavItem>
@@ -45,9 +55,11 @@ const Sidebar = (props) => {
                     <NavItem>
                         <NavLink>History</NavLink>
                     </NavItem>
+                    {localStorage.getItem('role') == 'admin' ?
                     <NavItem onClick={showModal}>
                         <NavLink>Add Book</NavLink>
                     </NavItem>
+                    : false }
                 </div>
                 <Modals modalShow={modalShow} toggle={toggle} />
             </Nav>
