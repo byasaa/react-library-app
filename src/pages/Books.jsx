@@ -45,6 +45,7 @@ class Books extends Component {
                             <div className="p-4">
                                 <h5 className="mb-0"> {book.title} </h5>
                                 <p className="small text-muted"> {book.description} </p>
+                            <Link to={`/book/${book.id}`} className="card-link">Detail</Link>
                             </div>
                         </CardBody>
                     </Card>

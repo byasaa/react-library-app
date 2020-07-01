@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import axios from 'axios'
 import detailStyle from '../styles/detail.module.css'
 import Swal from 'sweetalert2'
-import { Container, Nav, Navbar, NavbarText, NavItem,Button } from "reactstrap"
+import { Container, Nav, Navbar, NavItem,Button } from "reactstrap"
 import ModalEdit from "../components/ModalEdit"
 
 class DetailBook extends Component {
@@ -67,13 +67,30 @@ class DetailBook extends Component {
               })
             }
           })
-
+    }
+    handleBorrowBook= (e) => {
+        e.preventDefault()
+        const token = localStorage.getItem('token')
+        axios({
+            method: "PATCH",
+            url: process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id + "/borrow",
+            headers : {
+                Authorization : token
+            }
+        }).then((res) => {
+            console.log(res)
+            window.location.reload()
+        }).catch((err) => {
+            console.log(err)
+        })
     }
     componentDidMount(){
      this.getDetailBook()  
     }
     render() {
         const toggleEdit = () => this.setState({showModalUpdate: !this.state.showModalUpdate})
+        let disabledButton = this.state.book.status === "Available" ? false : true
+        let classStatus = this.state.book.status === "Available" ? 'text-success' : 'text-danger'
         // const {title, description, created_at, image, status} = this.state.book
         const formatDate = date => {
             let data = Date.parse(date);
@@ -112,21 +129,21 @@ class DetailBook extends Component {
         return (
             <Container fluid>
             <div style={cover}>
-                    <Navbar expand="md" color="light">
-                        <Nav className="mr-auto" navbar>
+                    <Navbar expand="md">
+                        <Nav className="ml-auto" navbar sty>
                         <NavItem className="mr-3">
-                             <NavbarText onClick={toggleEdit}>Edit</NavbarText>
+                             <Button outline color="warning" onClick={toggleEdit}>Edit</Button>
                         </NavItem>
                         <NavItem>
-                             <NavbarText onClick={this.handleDeleteBook}>Hapus</NavbarText>
+                            <Button outline color="warning" onClick={this.handleDeleteBook}>Delete</Button>
                         </NavItem>
                         </Nav>
                     </Navbar>
                 <div style={coverMini}></div>
-                    <Button color="warning" size="lg" style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button>
+                    <Button color="warning" size="lg" disabled={disabledButton} onClick={this.handleBorrowBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button>
                 <Container>
                 <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>Novel</div>
-                <p style={{ position : 'absolute',
+                <p className={classStatus} style={{ position : 'absolute',
                             width: 'auto',
                             height: '51px',
                             left: '850px',
@@ -135,8 +152,7 @@ class DetailBook extends Component {
                             fontStyle: 'normal',
                             fontWeight: 'bold',
                             fontSize: '30px',
-                            lineHeight: '68px',
-                            color: '#99D815'
+                            lineHeight: '68px'
                 }}>{this.state.book.status}</p>
                 <div>
                     <h1 className={detailStyle.title}>{ this.state.book.title }</h1>
