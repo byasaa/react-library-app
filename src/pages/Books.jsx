@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom';
 import axios from 'axios'
-import {Col, Card, CardImg, CardBody, CardTitle, CardText} from "reactstrap"
+import {Col, Card, CardImg, CardBody} from "reactstrap"
 
 class Books extends Component {
     constructor(){
@@ -38,13 +38,14 @@ class Books extends Component {
             <>
             {
                 this.state.books.map((book) => {
-                    return <Col key={book.id} md={3}>
-                    <Card>
-                        <CardImg top width="100%" src={`http://localhost:3000/api/img/${book.image}`} alt={`${book.title}`} />
-                        <CardBody>
-                            <CardTitle>{book.title}</CardTitle>
-                            <CardText> {book.description} </CardText>
-                            <Link to={`/book/${book.id}`} >Detail</Link>
+                    return <Col key={book.id} lg={3} md={6} className="mb-4 mb-lg-0" >
+                    <Card className="shadow-sm border-0 rounded" >
+                        <CardBody className="p-0" >
+                        <CardImg src={`${process.env.REACT_APP_API_URL}img/${book.image}`} alt={`${book.title}`} />
+                            <div className="p-4">
+                                <h5 className="mb-0"> {book.title} </h5>
+                                <p className="small text-muted"> {book.description} </p>
+                            </div>
                         </CardBody>
                     </Card>
                 </Col>

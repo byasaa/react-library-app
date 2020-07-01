@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import axios from "axios";
+import Swal from "sweetalert2"
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
 
 class Modals extends Component {
@@ -75,7 +76,12 @@ class Modals extends Component {
         })
         .then((res) => {
           console.log(res)
-          
+          Swal.fire(
+            'Insert Book Success!',
+            `With id = ${res.data.data[0].id}`,
+            'success'
+          )
+          this.props.history.push('/')  
         })
         .catch((err) => {
           console.log(err)

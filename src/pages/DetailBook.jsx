@@ -2,17 +2,17 @@ import React, { Component } from "react"
 import axios from 'axios'
 import detailStyle from '../styles/detail.module.css'
 import Swal from 'sweetalert2'
-import { Container, Nav, Navbar, NavbarText, NavItem } from "reactstrap"
+import { Container, Nav, Navbar, NavbarText, NavItem,Button } from "reactstrap"
 import ModalEdit from "../components/ModalEdit"
 
 class DetailBook extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            book : [],
             showModalUpdate : false,
             showModalDelete : false,
-            showModalLoan : false,
-            book : []
+            showModalLoan : false
         }
     }
     getDetailBook = () => {
@@ -29,6 +29,7 @@ class DetailBook extends Component {
             this.setState({
                 book : res.data.data[0]
             })
+            console.log(this.state)
         })
         .catch((err) => {
             console.log(err)
@@ -69,11 +70,11 @@ class DetailBook extends Component {
 
     }
     componentDidMount(){
-     this.getDetailBook()   
+     this.getDetailBook()  
     }
     render() {
         const toggleEdit = () => this.setState({showModalUpdate: !this.state.showModalUpdate})
-        const {title, description, created_at, image, status} = this.state.book
+        // const {title, description, created_at, image, status} = this.state.book
         const formatDate = date => {
             let data = Date.parse(date);
             let newDate = new Date(data);
@@ -90,7 +91,7 @@ class DetailBook extends Component {
             left: '0px',
             top: '0px',
 
-            backgroundImage: `url("${process.env.REACT_APP_API_URL}img/${image}")`,
+            backgroundImage: `url("${process.env.REACT_APP_API_URL}img/${this.state.book.image}")`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center'
@@ -102,10 +103,11 @@ class DetailBook extends Component {
             left: '1100px',
             top: '200px',
         
-            background: `url("${process.env.REACT_APP_API_URL}img/${image}")`,
+            backgroundImage: `url("${process.env.REACT_APP_API_URL}img/${this.state.book.image}")`,
+            backgroundSize: 'cover',
             boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.25)',
             borderRadius: '13px',
-            backgroundSize: 'cover'
+            webKitBackgroundSize : '100%'
         }
         return (
             <Container fluid>
@@ -120,8 +122,8 @@ class DetailBook extends Component {
                         </NavItem>
                         </Nav>
                     </Navbar>
-                <div style={coverMini}>
-                </div>
+                <div style={coverMini}></div>
+                    <Button color="warning" size="lg" style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button>
                 <Container>
                 <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>Novel</div>
                 <p style={{ position : 'absolute',
@@ -135,15 +137,15 @@ class DetailBook extends Component {
                             fontSize: '30px',
                             lineHeight: '68px',
                             color: '#99D815'
-                }}>{status}</p>
+                }}>{this.state.book.status}</p>
                 <div>
-                    <h1 className={detailStyle.title}>{ title }</h1>
-                    <p className={detailStyle.date}> {formatDate(created_at)} </p>
+                    <h1 className={detailStyle.title}>{ this.state.book.title }</h1>
+                    <p className={detailStyle.date}> {formatDate(this.state.book.created_at)} </p>
                 </div>
                 <div>
-                    <p className={detailStyle.description}> {description} </p>
+                    <p className={detailStyle.description}> {this.state.book.description} </p>
                 </div>
-                <ModalEdit modalEditShow={this.state.showModalUpdate} toggle={toggleEdit} data={this.state.book} />
+                <ModalEdit modalEditShow={this.state.showModalUpdate} toggle={toggleEdit} data={this.state.book} {...this.props} />
                 </Container>
             </div>
             </Container>    
