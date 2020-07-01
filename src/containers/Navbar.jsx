@@ -2,11 +2,13 @@ import React, {useState} from 'react'
 import { 
   Navbar, Nav,
   UncontrolledDropdown,
-  DropdownToggle, DropdownMenu, DropdownItem, Form } from "reactstrap"
+  DropdownToggle, DropdownMenu, DropdownItem,Input, Button, Form } from "reactstrap"
 import '../styles/navbar.css';
 
 function NavBar (props) {
   const [search, setSearch] = useState('')
+  const [orderBy, setOrder] = useState('')
+  const [sort, setSort] = useState('')
   const enterSearch = (e) => {
     e.preventDefault()
    window.location.replace(`/?search=${search}`)
@@ -15,27 +17,58 @@ function NavBar (props) {
       <>
         <Navbar color="light" light expand="md" style={{ boxShadow : '0 .5rem 1rem rgba(0,0,0,.15) !important' ,marginLeft: '-15px', marginRight: '-40px' }}>
             <Nav className="mr-auto" navbar>
-              <UncontrolledDropdown nav inNavbar>
+              <Form onSubmit={()=> window.location.replace(`${props.location.search}&orderBy=${orderBy}&sort=${sort}`)} className="d-flex flex-row" >
+                <Input type="select" name="orderBy" onChange={(e) => setOrder(e.target.value)} value={orderBy}>
+                  <option value="">---Order---</option>
+                  <option value="title">Title</option>
+                  <option value="description">Description</option>
+                  <option value="genre">Genre</option>
+                  <option value="author">Author</option>
+                  <option value="created_at">Created</option>
+                </Input>
+                <Input type="select" name="sort" onChange={(e) => setSort(e.target.value)} value={sort}>
+                  <option value="">---Sort---</option>
+                  <option value="asc">ASC</option>
+                  <option value="desc">DESC</option>
+                </Input>
+                <Button color="warning">Filter</Button>
+              </Form>
+              {/* <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  All Categories
+                  Order By
                 </DropdownToggle>
                 <DropdownMenu>
+                  <DropdownItem onClick={true}>
+                    Tite
+                  </DropdownItem>
                   <DropdownItem>
-                    Novel
+                    Author
+                  </DropdownItem>
+                  <DropdownItem>
+                    Genre
+                  </DropdownItem>
+                  <DropdownItem>
+                    Description
+                  </DropdownItem>
+                  <DropdownItem>
+                    Created At
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
 
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  All Time
+                  Sort By
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem>
-                    Novel
+                  <DropdownItem onClick={true}>
+                    ASC
+                  </DropdownItem>
+                  <DropdownItem onClick={true}>
+                    DESC
                   </DropdownItem>
                 </DropdownMenu>
-              </UncontrolledDropdown>
+              </UncontrolledDropdown> */}
             </Nav>
               <div id="custom-search-input" className="d-flex align-items-center">
                 <Form onSubmit={enterSearch}>

@@ -17,14 +17,15 @@ class Books extends Component {
         let search = qs.search || ""
         let limit = qs.limit || ""
         let page = qs.page || ""
+        let order = qs.orderBy || "created_at"
+        let sort = qs.sort || "DESC"
         const token = localStorage.getItem('token')
         axios({
             method : 'GET',
-            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}&page=${page}`,
+            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}&page=${page}&orderBy=${order}&sort=${sort}`,
             headers : {
                 Authorization : token
             }
-
         })
         .then((res)=>{
             this.setState({
