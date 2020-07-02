@@ -76,7 +76,9 @@ class DetailBook extends Component {
                 Authorization : token
             }
         }).then(() => {
-            window.location.reload()
+            this.props.history.push(`/book/${this.props.match.params.id}`)
+            this.getDetailBook()  
+            this.getLoanBook()
         }).catch((err) => {
             console.log(err)
         })
@@ -114,7 +116,10 @@ class DetailBook extends Component {
                 Authorization : token
             }
         }).then(() => {
-            window.location.reload()
+            this.props.history.push(`/book/${this.props.match.params.id}`)
+            this.getDetailBook()  
+            this.getLoanBook()
+            // window.location.reload()
         }).catch((err) => {
             console.log(err)
         })
@@ -194,7 +199,7 @@ class DetailBook extends Component {
                     }
 
                 <Container>
-                <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>Novel</div>
+                <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>{this.state.book.genre}</div>
                 <p className={classStatus} style={{ position : 'absolute',
                             width: 'auto',
                             height: '51px',

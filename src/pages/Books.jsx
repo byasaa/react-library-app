@@ -22,7 +22,7 @@ class Books extends Component {
         const token = localStorage.getItem('token')
         axios({
             method : 'GET',
-            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=${limit}&page=${page}&orderBy=${order}&sort=${sort}`,
+            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=4&page=${page}&orderBy=${order}&sort=${sort}`,
             headers : {
                 Authorization : token
             }
@@ -42,7 +42,7 @@ class Books extends Component {
 //         this.setState({
 //             page: +qs.page + 1
 //         })
-//         window.location.replace(`/?page=${this.state.page}`)
+//         this.props.history.push(`/?page=${this.state.page}`)
 //     }
 //    prevPage = (e) => {
 //     let qs = QueryString.parse(this.props.location.search)
@@ -50,13 +50,19 @@ class Books extends Component {
 //         this.setState({
 //             page: +qs.page - 1
 //         })
-//         window.location.replace(`/?page=${this.state.page}`)
+//         this.props.history.push(`/?page=${this.state.page}`)
 //     }
     componentDidMount(){
         this.getAllBook()
     }
+    componentDidUpdate(prevProps) {
+        if(prevProps.location.search !== this.props.location.search){
+            this.getAllBook()
+        }
+    }
     render(){
         let qs = QueryString.parse(this.props.location.search)
+        qs.page = qs.page ||  1
         let disableButton = qs.page == 1 ? true : false
         return(
             <>
@@ -77,8 +83,8 @@ class Books extends Component {
                 })
             }
                 <Col md={12}>
-                    <Button color="warning" disabled={disableButton} className="mr-auto" onClick={() => window.location.replace(`/?page=${+qs.page-1}`)}>Prev</Button>{"  "}
-                    <Button color="warning" className="ml-auto" onClick={() => window.location.replace(`/?page=${+qs.page+1}`)}> Next</Button>
+                    <Button color="warning" disabled={disableButton} className="mr-auto" onClick={() => this.props.history.push(`/?page=${+qs.page-1}`)}>Prev</Button>{"  "}
+                    <Button color="warning" className="ml-auto" onClick={() => this.props.history.push(`/?page=${+qs.page+1}`)}> Next</Button>
                 </Col>
             </>
         )

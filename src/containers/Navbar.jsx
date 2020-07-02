@@ -11,13 +11,13 @@ function NavBar (props) {
   const [sort, setSort] = useState('')
   const enterSearch = (e) => {
     e.preventDefault()
-   window.location.replace(`/?search=${search}`)
+   props.history.push(`/?search=${search}`)
   }
   return (
       <>
         <Navbar color="light" light expand="md" style={{ boxShadow : '0 .5rem 1rem rgba(0,0,0,.15) !important' ,marginLeft: '-15px', marginRight: '-40px' }}>
             <Nav className="mr-auto" navbar>
-              <Form onSubmit={()=> window.location.replace(`${props.location.search}&orderBy=${orderBy}&sort=${sort}`)} className="d-flex flex-row" >
+              <Form onSubmit={()=> props.history.push(`${props.location.search}&orderBy=${orderBy}&sort=${sort}`)} className="d-flex flex-row" >
                 <Input type="select" name="orderBy" onChange={(e) => setOrder(e.target.value)} value={orderBy}>
                   <option value="">---Order---</option>
                   <option value="title">Title</option>
@@ -31,7 +31,8 @@ function NavBar (props) {
                   <option value="asc">ASC</option>
                   <option value="desc">DESC</option>
                 </Input>
-                <Button color="warning">Filter</Button>
+              <Input type="hidden" name="page" value={1} />
+                <Button color="warning" onClick={()=> props.history.push(`${props.location.pathname}?orderBy=${orderBy}&sort=${sort}`)}>Filter</Button>
               </Form>
               {/* <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
