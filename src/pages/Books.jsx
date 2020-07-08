@@ -4,6 +4,7 @@ import QueryString from "query-string"
 import { connect } from "react-redux";
 import {Col, Card, CardImg, CardBody, Button} from "reactstrap"
 import { getBook } from '../redux/actions/book';
+import Swal from 'sweetalert2';
 
 class Books extends Component {
     constructor(props){
@@ -30,23 +31,40 @@ class Books extends Component {
         })
         .catch((err) => {
             console.log(err)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Data Null",
+            })
         })
     }
-    nextPage = (e) => {
+    nextPage = () => {
         let qs = QueryString.parse(this.props.location.search)
-        e.preventDefault()
-        this.setState({
-            page: +qs.page + 1
-        })
-        this.props.history.push(`/?page=${this.state.page}`)
+        qs.page = qs.page ||  1
+        if (this.props.location.search === ""){
+            this.props.history.push(`/?page=${parseInt(qs.page)+1}`)
+          } else {
+            if (qs.page){
+              const url = this.props.location.search.replace(`page=${qs.page}`, `page=${parseInt(qs.page)+1}`)
+              this.props.history.push(url)
+            }else {
+              this.props.history.push(`${this.props.location.search}&page=${parseInt(qs.page)+1}`)
+            }
+        }
     }
-   prevPage = (e) => {
+   prevPage = () => {
     let qs = QueryString.parse(this.props.location.search)
-        e.preventDefault()
-        this.setState({
-            page: +qs.page - 1
-        })
-        this.props.history.push(`/?page=${this.state.page}`)
+    qs.page = qs.page ||  1
+        if (this.props.location.search === ""){
+            this.props.history.push(`/?page=${parseInt(qs.page)-1}`)
+          } else {
+            if (qs.page){
+              const url = this.props.location.search.replace(`page=${qs.page}`, `page=${parseInt(qs.page)-1}`)
+              this.props.history.push(url)
+            }else {
+              this.props.history.push(`${this.props.location.search}&page=${parseInt(qs.page)-1}`)
+            }
+        }
     }
     componentDidMount(){
         this.getAllBook()
@@ -79,8 +97,8 @@ class Books extends Component {
                 })
             }
                 <Col md={12}>
-                    <Button color="warning" disabled={disableButton} className="mr-auto" onClick={() => this.props.history.push(`/?page=${+qs.page-1}`)}>Prev</Button>{"  "}
-                    <Button color="warning" className="ml-auto" onClick={() => this.props.history.push(`/?page=${+qs.page+1}`)}> Next</Button>
+                    <Button color="warning" disabled={disableButton} className="mr-auto" onClick={() => this.prevPage()}>Prev</Button>{"  "}
+                    <Button color="warning" className="ml-auto" onClick={() => this.nextPage()}> Next</Button>
                 </Col>
             </>
         )

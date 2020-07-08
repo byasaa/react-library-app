@@ -3,6 +3,7 @@ import {
   Navbar, Nav,
   Input, Button, Form } from "reactstrap"
 import '../styles/navbar.css';
+import QueryString from 'query-string';
 
 function NavBar (props) {
   const [search, setSearch] = useState('')
@@ -10,7 +11,29 @@ function NavBar (props) {
   const [sort, setSort] = useState('')
   const enterSearch = (e) => {
     e.preventDefault()
-   props.history.push(`/?search=${search}`)
+    if (props.location.search === ""){
+      props.history.push(`/?search=${search}`)
+    } else {
+      let qs = QueryString.parse(props.location.search)
+      if (qs.search){
+        const url = props.location.search.replace(`search=${qs.search}`, `search=${search}`)
+        props.history.push(url)
+      }else {
+        props.history.push(`${props.location.search}&search=${search}`)
+      }
+    }
+  }
+  const filter = () => {
+    if (props.location.search === ""){
+      props.history.push(`/?orderBy=${orderBy}&sort=${sort}`)
+    } else {
+      let qs = QueryString.parse(props.location.search)
+      if (qs.sort || qs.orderBy){
+        props.history.push(props.location.search.replace(`orderBy=${qs.orderBy}`, `orderBy=${orderBy}`).replace(`sort=${qs.sort}`, `sort=${sort}`))
+      }else {
+        props.history.push(`${props.location.search}&orderBy=${orderBy}&sort=${sort}`)
+      }
+    } 
   }
   return (
       <>
@@ -31,44 +54,8 @@ function NavBar (props) {
                   <option value="desc">DESC</option>
                 </Input>
               <Input type="hidden" name="page" value={1} />
-                <Button color="warning" onClick={()=> props.history.push(`${props.location.pathname}?orderBy=${orderBy}&sort=${sort}`)}>Filter</Button>
+                <Button color="warning" onClick={()=> filter()}>Filter</Button>
               </Form>
-              {/* <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Order By
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={true}>
-                    Tite
-                  </DropdownItem>
-                  <DropdownItem>
-                    Author
-                  </DropdownItem>
-                  <DropdownItem>
-                    Genre
-                  </DropdownItem>
-                  <DropdownItem>
-                    Description
-                  </DropdownItem>
-                  <DropdownItem>
-                    Created At
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Sort By
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={true}>
-                    ASC
-                  </DropdownItem>
-                  <DropdownItem onClick={true}>
-                    DESC
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown> */}
             </Nav>
               <div id="custom-search-input" className="d-flex align-items-center">
                 <Form onSubmit={enterSearch}>
