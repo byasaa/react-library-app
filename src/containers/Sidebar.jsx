@@ -39,7 +39,7 @@ const Sidebar = (props) => {
         <>
             <Nav className="col-md-12 d-none d-lg-block bg-light sidebar">
                 <div className="user-profile sidebar-heading">
-                    <img src="logo512.png" alt="user"/>
+                    <img src="/logo512.png" alt="user"/>
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav caret>
                             {props.auth.data.username}
