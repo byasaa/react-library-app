@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import {Row, Col, Table, Card, CardBody, CardHeader, Button} from "reactstrap"
 // import {Link} from 'react-router-dom';
-import { getGenre } from "../redux/actions/genre";
+import { getGenre, deleteGenre } from "../redux/actions/genre";
 import { connect } from "react-redux";
+import Swal from 'sweetalert2';
 
 class GenresTable extends Component {
     constructor() {
@@ -22,6 +23,38 @@ class GenresTable extends Component {
         .catch((err) => {
             console.log(err)
         })
+    }
+    handleDeleteAuthor = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.value) {
+              const token = this.props.auth.data.token
+              this.props.dispatch(deleteGenre(id, token))
+              .then((res)=>{
+                Swal.fire(
+                    'Deleted!',
+                    `The Genre With id = ${res.value.data.data.id} deleted.`,
+                    'success'
+                )
+                this.props.history.push('/genre')
+                this.handleGetGenre()
+              }).catch((err)=> {
+                  console.log(err)
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong'
+                  })
+              })
+            }
+          })
     }
     componentDidMount(){
         this.handleGetGenre()
@@ -54,7 +87,7 @@ class GenresTable extends Component {
                                     <td>{genre.name}</td>
                                     <td>
                                         <Button className="mr-3" color="success" >Edit</Button>
-                                        <Button color="danger" >Delete</Button>
+                                        <Button color="danger" onClick={() => this.handleDeleteAuthor(genre.id)}>Delete</Button>
                                     </td>
                                 </tr>
                                 })}
