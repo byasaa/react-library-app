@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import "../../styles/auth.css"
-import axios from 'axios'
+import { connect } from "react-redux";
 import Swal from "sweetalert2"
 import { Col, Row, Container, Form, FormGroup, Input, Label, Button } from "reactstrap"
 import { Link } from "react-router-dom"
+import { register } from "../../redux/actions/auth";
+
 class Register extends Component {
     constructor() {
         super()
@@ -14,14 +16,20 @@ class Register extends Component {
     }
     regUser = (e) => {
         e.preventDefault();
-        axios({
-            method : "POST",
-            url : 'http://localhost:3000/api/auth/register',
-            data : {
-                username: this.state.username,
-                password : this.state.password
-            }
-        }).then(() => {
+        const data = {
+            username : this.state.username,
+            password : this.state.password
+        }
+        this.props.dispatch(register(data))
+        // axios({
+        //     method : "POST",
+        //     url : 'http://localhost:3000/api/auth/register',
+        //     data : {
+        //         username: this.state.username,
+        //         password : this.state.password
+        //     }
+        // })
+        .then(() => {
             Swal.fire(
                 'Register Success!',
                 `Please Login`,
@@ -63,4 +71,9 @@ class Register extends Component {
         )
     }
 }
-export default Register
+
+const mapStateToProps = (state) => ({
+    register : state.register
+})
+
+export default connect(mapStateToProps)(Register)

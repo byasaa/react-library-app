@@ -1,12 +1,13 @@
 import React, { Component } from "react"
 import "../../styles/auth.css"
-import axios from 'axios'
+import { connect } from "react-redux";
+import { login } from "../../redux/actions/auth";
 import Swal from 'sweetalert2'
 import { Col, Row, Container, Form, FormGroup, Input, Label, Button } from "reactstrap"
 import { Link } from "react-router-dom"
 class Login extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             username : '',
             password : ''
@@ -14,21 +15,12 @@ class Login extends Component {
     }
     loginUser = (e) => {
         e.preventDefault()
-        axios({
-            method: 'POST',
-            url : 'http://localhost:3000/api/auth/login',
-            data : {
-                username :this.state.username,
-                password : this.state.password
-            }
-        })
-        .then((res) => {
-            console.log(res)
-            localStorage.setItem('token', res.data.data[0].token)
-            localStorage.setItem('refreshToken', res.data.data[0].refreshToken)
-            localStorage.setItem('username' , res.data.data[0].username)
-            localStorage.setItem('role' , res.data.data[0].role)
-            localStorage.setItem('id' , res.data.data[0].id)
+        const data = {
+            username : this.state.username,
+            password : this.state.password
+        }
+        this.props.login(data) 
+        .then(() => {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -40,7 +32,6 @@ class Login extends Component {
                   toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
               })
-              
               Toast.fire({
                 icon: 'success',
                 title: 'Signed in successfully'
@@ -51,7 +42,7 @@ class Login extends Component {
             console.log(err)
         })
     }
-    render () {
+    render () {;
         return (
             <div>
                 <Container>
@@ -85,5 +76,9 @@ class Login extends Component {
         )
     }
 }
+const mapStateToProps = (state) => ({
+    auth : state.auth
+})
 
-export default Login
+const mapDispatchToProps = { login }
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
