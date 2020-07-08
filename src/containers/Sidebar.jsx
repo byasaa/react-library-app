@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import Swal from "sweetalert2"
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {Nav, NavItem, NavLink, UncontrolledDropdown,
     DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import "../styles/layout.css"
 import {Modals} from './index'
+import { logout } from "../redux/actions/auth";
+import { connect } from "react-redux";
 
 const Sidebar = (props) => {
     const [modalShow, setModalShow] = useState(false);
@@ -12,8 +14,10 @@ const Sidebar = (props) => {
     const showModal = () => {
         setModalShow(!modalShow)
     }
+    const history = useHistory()
     const handleLogout = () => {
-        localStorage.clear()
+        props.dispatch(logout())
+        history.push('/login')
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -38,28 +42,36 @@ const Sidebar = (props) => {
                     <img src="logo512.png" alt="user"/>
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav caret>
-                            {localStorage.getItem('username')}
-                            (<span> {localStorage.getItem('role')} </span>)
+                            {props.auth.data.username}
+                            (<span> {props.auth.data.role} </span>)
                         </DropdownToggle>
                             <DropdownMenu>
-                            <Link to='/login' onClick={handleLogout} >
-                                <DropdownItem>
+                                <DropdownItem onClick={handleLogout}>
                                     Logout
                                 </DropdownItem>
-                                </Link>
                             </DropdownMenu>
                     </UncontrolledDropdown>
                 </div>
                 <div className="container">
                     <NavItem>
-                        <NavLink>Explore</NavLink>
+                        <Link to="/" className="nav-link">Explore</Link>
                     </NavItem>
                     <NavItem>
-                        <NavLink>History</NavLink>
+                        <Link to="/history" className="nav-link">History</Link>
                     </NavItem>
-                    {localStorage.getItem('role') == 'admin' ?
+                    {props.auth.data.role === 'admin' ?
+                    <NavItem >
+                        <Link className="nav-link" to="/author">Author</Link>
+                    </NavItem>
+                    : false }
+                    {props.auth.data.role === 'admin' ?
+                    <NavItem >
+                        <Link className="nav-link" to="/genre">Genre</Link>
+                    </NavItem>
+                    :false }
+                    {props.auth.data.role === 'admin' ?
                     <NavItem onClick={showModal}>
-                        <NavLink>Add Book</NavLink>
+                        <NavLink href="#">Add Book</NavLink>
                     </NavItem>
                     : false }
                 </div>
@@ -68,4 +80,7 @@ const Sidebar = (props) => {
         </>
     ) 
 }
-export default Sidebar
+const mapStateToProps = state => ({
+    auth : state.auth
+})
+export default connect(mapStateToProps)(Sidebar)
