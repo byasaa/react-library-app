@@ -40,6 +40,11 @@ class Login extends Component {
         })
         .catch((err) => {
             console.log(err)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Username or Password is Invalid",
+            })
         })
     }
     render () {;
@@ -58,11 +63,11 @@ class Login extends Component {
                             <Form onSubmit={this.loginUser}>
                                 <FormGroup>
                                     <Label>Username</Label>
-                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
+                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} required />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label>Password</Label>
-                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
+                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} required />
                                 </FormGroup> 
                                 <Button color="secondary">Login</Button>{' '}
                                 <Link to='/register'>

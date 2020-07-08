@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Swal from "sweetalert2"
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label } from 'reactstrap';
 import { connect } from "react-redux";
 import { postAddBook } from "../redux/actions/book";
 import { getGenre } from "../redux/actions/genre";
@@ -65,6 +65,11 @@ class Modals extends Component {
         })
         .catch((err) => {
           console.log(err)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: err,
+          })
         })
       }
       componentDidMount(){
@@ -86,16 +91,16 @@ class Modals extends Component {
               <Form onSubmit={this.handlePostBook}>
                     <FormGroup>
                         <Label>Title</Label>
-                        <Input type='text' placeholder='Title' value={this.state.title} onChange={(e) => this.setState({title : e.target.value})} />
+                        <Input type='text' placeholder='Title' value={this.state.title} onChange={(e) => this.setState({title : e.target.value})} required />
                     </FormGroup>
                     <FormGroup>
                         <Label>Description</Label>
-                        <Input type='textarea' placeholder='Description' value={this.state.description} onChange={(e) => this.setState({description : e.target.value})} />
+                        <Input type='textarea' placeholder='Description' value={this.state.description} onChange={(e) => this.setState({description : e.target.value})} required />
                     </FormGroup>
                     <FormGroup>
                     <Label>Author</Label>
-                      <Input type="select" name="author" value={this.state.author} onChange={(e) => this.setState({author : e.target.value})} >
-                        <option value="0">Pilih Author</option>
+                      <Input type="select" name="author" value={this.state.author} onChange={(e) => this.setState({author : e.target.value})} required >
+                        <option value="">Pilih Author</option>
                           {this.state.authors.map((author) => {
                             return <option key={author.id} value={author.id}>{author.name}</option>
                           })}
@@ -103,8 +108,8 @@ class Modals extends Component {
                     </FormGroup>
                     <FormGroup>
                     <Label>Genre</Label>
-                      <Input type="select" name="genre" value={this.state.genre} onChange={(e) => this.setState({genre : e.target.value})} >
-                      <option value="0">Pilih Genre</option>
+                      <Input type="select" name="genre" value={this.state.genre} onChange={(e) => this.setState({genre : e.target.value})} required >
+                      <option value="">Pilih Genre</option>
                         {this.state.genres.map((genre) => {
                             return <option key={genre.id} value={genre.id}>{genre.name}</option>
                           })}
@@ -112,11 +117,7 @@ class Modals extends Component {
                     </FormGroup>
                     <FormGroup>
                       <Label>Image</Label>
-                      <Input type="file" name="file" onChange={(e) => this.setState({image: e.target.files})}/>
-                      <FormText color="muted">
-                      This is some placeholder block-level help text for the above input.
-                      It's a bit lighter and easily wraps to a new line.
-                      </FormText>
+                      <Input type="file" name="file" onChange={(e) => this.setState({image: e.target.files})} required/>
                   </FormGroup>
                 <Button color="primary" >Create</Button>{' '}
                 </Form>

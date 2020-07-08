@@ -21,14 +21,6 @@ class Register extends Component {
             password : this.state.password
         }
         this.props.dispatch(register(data))
-        // axios({
-        //     method : "POST",
-        //     url : 'http://localhost:3000/api/auth/register',
-        //     data : {
-        //         username: this.state.username,
-        //         password : this.state.password
-        //     }
-        // })
         .then(() => {
             Swal.fire(
                 'Register Success!',
@@ -37,6 +29,11 @@ class Register extends Component {
               ).then(() => this.props.history.push('/login'))
         }).catch((err) => {
             console.log(err)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: err,
+              })
         })
     }
     render () {
@@ -53,11 +50,11 @@ class Register extends Component {
                             <Form onSubmit={this.regUser} >
                                <FormGroup>
                                     <Label>Username</Label>
-                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} />
+                                <Input type="text" placeholder="Username" name="username" value={this.state.username} onChange={(e) => this.setState({username : e.target.value})} required />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label>Password</Label>
-                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} />
+                                    <Input type="password" placeholder="Password" name="password" value={this.state.password} onChange={(e) => this.setState({password : e.target.value})} required />
                                 </FormGroup> 
                                 <Button color="secondary">Sign Up</Button>{' '}
                                 <Link to='/login'>
