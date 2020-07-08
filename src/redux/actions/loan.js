@@ -25,3 +25,19 @@ export const getLoanByUser = (id, token) => {
         })
     }
 }
+
+export const patchReturnBook = (id, book_id, token) => {
+    return {
+        type : "PATCH_RETURN_BOOK",
+        payload: axios({
+            method : "PATCH",
+            url : process.env.REACT_APP_API_URL + 'loans/' + id,
+            headers : {
+                Authorization : token
+            },
+            data : {
+                book_id : book_id
+            }
+        })
+    }
+}
