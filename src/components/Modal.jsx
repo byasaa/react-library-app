@@ -1,7 +1,10 @@
 import React, {Component} from "react";
-import axios from "axios";
 import Swal from "sweetalert2"
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormText } from 'reactstrap';
+import { connect } from "react-redux";
+import { postAddBook } from "../redux/actions/book";
+import { getGenre } from "../redux/actions/genre";
+import { getAuthor } from "../redux/actions/author";
 
 class Modals extends Component {
        constructor(props){
@@ -18,17 +21,11 @@ class Modals extends Component {
         }
       }
       getAuthor = () => {
-        const token = localStorage.getItem('token')
-          axios({
-            method : "GET",
-            url : process.env.REACT_APP_API_URL + 'authors/',
-            headers : {
-              Authorization : token
-            }
-          })
-          .then((res) => {
+        const token = this.props.auth.data.token
+          this.props.dispatch(getAuthor(token))
+          .then(() => {
             this.setState({
-              authors : res.data.data
+              authors : this.props.author.data
             })
           })
           .catch((err) => {
@@ -36,26 +33,20 @@ class Modals extends Component {
           })
        }
        getGenre = () => {
-        const token = localStorage.getItem('token')
-        axios({
-          method : "GET",
-          url : process.env.REACT_APP_API_URL + 'genres/',
-          headers : {
-            Authorization : token
-          }
-        })
-        .then((res) => {
-          this.setState({
-            genres : res.data.data
+        const token = this.props.auth.data.token
+        this.props.dispatch(getGenre(token))
+          .then(() => {
+            this.setState({
+              genres : this.props.genre.data
+            })
           })
-        })
         .catch((err) => {
           console.log(err)
         })
        }
       handlePostBook = (e) => {
         e.preventDefault()
-        const token = localStorage.getItem('token')
+        const token = this.props.auth.data.token
         const formData = new FormData()
         formData.append('title', this.state.title)
         formData.append('description', this.state.description)
@@ -63,20 +54,12 @@ class Modals extends Component {
         formData.append('genre_id', this.state.genre)
         formData.append('image', this.state.image[0])
         formData.append('book_status', this.state.book_status)
-        axios({
-          method : "POST",
-          url : process.env.REACT_APP_API_URL + 'books/',
-          data: formData,
-          headers : {
-            'Content-Type' : 'multipart/form-data',
-            Authorization : token
-          }
-        })
+        this.props.dispatch(postAddBook(formData, token))
         .then((res) => {
           console.log(res)
           Swal.fire(
             'Insert Book Success!',
-            `With id = ${res.data.data.id}`,
+            `With id = ${res.value.data.data.id}`,
             'success'
           ).then(() => window.location.reload())
         })
@@ -144,4 +127,10 @@ class Modals extends Component {
        }
 }
 
-export default Modals
+const mapStateToProps = state => ({
+  auth: state.auth,
+  book: state.book,
+  genre : state.genre,
+  author : state.author
+})
+export default connect(mapStateToProps)(Modals)

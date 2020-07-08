@@ -1,7 +1,7 @@
 import React from "react"
 import {Row} from "reactstrap"
 import Books from "../pages/Books"
-import Carousel from "../components/Carousel";
+// import Carousel from "../components/Carousel";
 function Content (props) {
     return (
         <main className="content">

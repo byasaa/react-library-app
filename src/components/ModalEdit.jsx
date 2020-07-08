@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
-import axios from "axios"
 import Swal from "sweetalert2"
 import { Button, Modal, ModalHeader, ModalBody,
-Form, FormGroup, Label, Input,FormText } from 'reactstrap';
+Form, FormGroup, Label, Input } from 'reactstrap';
+import { connect } from "react-redux";
+import { getDetailBook, putUpdateBook } from "../redux/actions/book";
+import { getAuthor } from "../redux/actions/author";
+import { getGenre } from "../redux/actions/genre";
 
 class ModalEdit extends Component {
   constructor(props){
@@ -13,93 +16,81 @@ class ModalEdit extends Component {
       author : "",
       genre : "",
       image : "",
-      book_status : "",
+      status : "",
       authors : [],
       genres : []
     }
   }
-  getAuthor = () => {
-    const token = localStorage.getItem('token')
-      axios({
-        method : "GET",
-        url : process.env.REACT_APP_API_URL + 'authors/',
-        headers : {
-          Authorization : token
-        }
+  getDetailBook = async () => {
+    const token = this.props.auth.data.token
+    const id = this.props.match.params.id
+    console.log(id)
+    await this.props.dispatch(getDetailBook(id, token))
+    .then(() => {
+      this.setState({
+          title : this.props.book.data.title,
+          description : this.props.book.data.description,
+          author : this.props.book.data.author_id,
+          genre : this.props.book.data.genre_id,
+          image : process.env.REACT_APP_API_URL + 'img/' + this.props.book.data.image,
+          status : this.props.book.data.status
       })
-      .then((res) => {
+    })
+  }
+  getAuthor = () => {
+    const token = this.props.auth.data.token
+      this.props.dispatch(getAuthor(token))
+      .then(() => {
         this.setState({
-          authors : res.data.data
+          authors : this.props.author.data
         })
-        console.log(res)
       })
       .catch((err) => {
         console.log(err)
       })
    }
    getGenre = () => {
-    const token = localStorage.getItem('token')
-    axios({
-      method : "GET",
-      url : process.env.REACT_APP_API_URL + 'genres/',
-      headers : {
-        Authorization : token
-      }
-    })
-    .then((res) => {
-      this.setState({
-        genres : res.data.data
+    const token = this.props.auth.data.token
+    this.props.dispatch(getGenre(token))
+      .then(() => {
+        this.setState({
+          genres : this.props.genre.data
+        })
       })
-      console.log(res)
-    })
     .catch((err) => {
       console.log(err)
     })
    }
    handlePutBook = (e) => {
      e.preventDefault()
-     const token = localStorage.getItem('token')
+     const token = this.props.auth.data.token
+     const id = this.props.match.params.id
      const formData = new FormData()
         formData.append('title', this.state.title)
         formData.append('description', this.state.description)
         formData.append('author_id', this.state.author)
         formData.append('genre_id', this.state.genre)
         formData.append('image', this.state.image[0])
-     axios({
-       method : "PUT",
-       url : process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id,
-       data : formData,
-       headers : {
-        'Content-Type' : 'multipart/form-data',
-         Authorization : token
-       } 
-     })
-     .then((res) => {
-        console.log(res)
+     this.props.dispatch(putUpdateBook(id, formData, token))
+     .then(() => {
         Swal.fire({
           icon: 'success',
           title: 'Update Success',
           showConfirmButton: true,
-          timer: 1500
+          timer: 1500 
         }).then((result) => {
           if(result)
           window.location.reload()
         })
-        // this.props.history.push(`/book/${this.props.match.params.id}`)
      })
      .catch((err) => {
       console.log(err)
      })
    }
    componentDidMount(){
+     this.getDetailBook()
      this.getAuthor()
      this.getGenre()
-   }
-   componentWillMount(){
-    console.log('will')
-    this.setState({
-      ...this.props.data
-     })
    }
     render() {
         const {
@@ -152,4 +143,10 @@ class ModalEdit extends Component {
     }
 }
 
-export default ModalEdit
+const mapStateToProps = state => ({
+  auth : state.auth,
+  book : state.book,
+  genre : state.genre,
+  author : state.author
+})
+export default connect(mapStateToProps)(ModalEdit)

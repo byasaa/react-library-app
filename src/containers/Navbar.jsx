@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import { 
   Navbar, Nav,
-  UncontrolledDropdown,
-  DropdownToggle, DropdownMenu, DropdownItem,Input, Button, Form } from "reactstrap"
+  Input, Button, Form } from "reactstrap"
 import '../styles/navbar.css';
 
 function NavBar (props) {

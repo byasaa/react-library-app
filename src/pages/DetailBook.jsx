@@ -1,33 +1,27 @@
 import React, { Component } from "react"
-import axios from 'axios'
 import detailStyle from '../styles/detail.module.css'
 import Swal from 'sweetalert2'
 import { Container, Nav, Navbar, NavItem,Button } from "reactstrap"
 import ModalEdit from "../components/ModalEdit"
+import { getDetailBook, deleteBook, patchBorrowBook } from "../redux/actions/book"
+import { connect } from "react-redux";
 
 class DetailBook extends Component {
     constructor(props) {
         super(props)
         this.state = {
             book : [],
-            loan : [],
             showModalUpdate : false,
             showModalDelete : false,
-            showModalLoan : false
         }
     }
     getDetailBook = () => {
-        const token = localStorage.getItem('token')
-        axios({
-            method : "GET",
-            url : process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id,
-            headers : {
-                Authorization : token
-            }
-        })
-        .then((res) => {
+        const token = this.props.auth.data.token
+        const id = this.props.match.params.id
+        this.props.dispatch(getDetailBook(id,token))
+        .then(() => {
             this.setState({
-                book : res.data.data[0]
+                book : this.props.book.data
             })
         })
         .catch((err) => {
@@ -46,39 +40,36 @@ class DetailBook extends Component {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.value) {
-              const token = localStorage.getItem('token')
-              axios({
-                  method : "DELETE",
-                  url : process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id,
-                  headers :{
-                      Authorization : token
-                  }
-              }).then((res)=>{
+              const token = this.props.auth.data.token
+              const id = this.props.match.params.id
+              this.props.dispatch(deleteBook(id, token))
+              .then((res)=>{
                 Swal.fire(
                     'Deleted!',
-                    `The Book With id = ${res.data.data.id} deleted.`,
+                    `The Book With id = ${res.value.data.data.id} deleted.`,
                     'success'
                 )
                 this.props.history.push('/')
               }).catch((err)=> {
                   console.log(err)
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong'
+                  })
               })
             }
           })
     }
-    handleBorrowBook= (e) => {
+    handleBorrowBook= async (e) => {
         e.preventDefault()
-        const token = localStorage.getItem('token')
-        axios({
-            method: "PATCH",
-            url: process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id + "/borrow",
-            headers : {
-                Authorization : token
-            }
-        }).then(() => {
-            this.props.history.push(`/book/${this.props.match.params.id}`)
+        const token = this.props.auth.data.token
+        const id = this.props.match.params.id
+        await this.props.dispatch(patchBorrowBook(id, token))
+        .then(() => {
             this.getDetailBook()  
             this.getLoanBook()
+            this.props.history.push(`/book/${id}`)
         }).catch((err) => {
             console.log(err)
         })
@@ -87,53 +78,48 @@ class DetailBook extends Component {
         e.preventDefault()
         window.history.back()
     }
-    getLoanBook = () => {
-        const token = localStorage.getItem('token')
-        axios({
-            method : "GET",
-            url : process.env.REACT_APP_API_URL + 'loans/book/' + this.props.match.params.id,
-            headers : {
-                Authorization : token
-            }
-        })
-        .then((res) => {
-            this.setState({
-                loan : res.data.data[0]
-            })
-            console.log(this.state)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
-    handleReturnBook = (e) => {
-        e.preventDefault()
-        const token = localStorage.getItem('token')
-        axios({
-            method: "PATCH",
-            url: process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id + "/return",
-            headers : {
-                Authorization : token
-            }
-        }).then(() => {
-            this.props.history.push(`/book/${this.props.match.params.id}`)
-            this.getDetailBook()  
-            this.getLoanBook()
-            // window.location.reload()
-        }).catch((err) => {
-            console.log(err)
-        })
-    }
+    // getLoanBook = async () => {
+    //     const token = this.props.auth.data.token
+    //     const id = this.props.match.params.id
+    //     await this.props.dispatch(getLoanBook(id, token))
+    //     .then(() => {
+    //         this.setState({
+    //             loan : this.props.loan.data
+    //         })
+    //     })
+    //     .catch((err) => {
+    //         console.log(err)
+    //     })
+    // }
+
+    // handleReturnBook = (e) => {
+    //     e.preventDefault()
+    //     const token = localStorage.getItem('token')
+    //     axios({
+    //         method: "PATCH",
+    //         url: process.env.REACT_APP_API_URL + 'books/' + this.props.match.params.id + "/return",
+    //         headers : {
+    //             Authorization : token
+    //         }
+    //     }).then(() => {
+    //         this.props.history.push(`/book/${this.props.match.params.id}`)
+    //         this.getDetailBook()  
+    //         this.getLoanBook()
+    //         // window.location.reload()
+    //     }).catch((err) => {
+    //         console.log(err)
+    //     })
+    // }
     componentDidMount(){
-     this.getDetailBook()  
-     this.getLoanBook()
+        // this.getLoanBook()
+        this.getDetailBook()  
     }
     render() {
         const toggleEdit = () => this.setState({showModalUpdate: !this.state.showModalUpdate})
         let disabledButton = this.state.book.status === "Available" ? false : true
         let classStatus = this.state.book.status === "Available" ? 'text-success' : 'text-danger'
-        const user_id = localStorage.getItem('id')
-        const role = localStorage.getItem('role')
+        // const user_id = this.props.auth.data.id
+        const role = this.props.auth.data.role
         // const {title, description, created_at, image, status} = this.state.book
         const formatDate = date => {
             let data = Date.parse(date);
@@ -180,7 +166,7 @@ class DetailBook extends Component {
                                 </Button>
                             </NavItem>
                         </Nav>
-                        {role == 'admin' ? 
+                        {role === 'admin' ? 
                         <Nav className="ml-auto" navbar sty>
                         <NavItem className="mr-3">
                              <Button outline color="warning" onClick={toggleEdit}>Edit</Button>
@@ -192,12 +178,7 @@ class DetailBook extends Component {
                         }
                     </Navbar>
                 <div style={coverMini}></div>
-                    {this.state.book.status == "Available" ? <Button color="warning" size="lg" disabled={disabledButton} onClick={this.handleBorrowBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button> : this.state.loan.user_id == user_id ? 
-                    <Button color="primary" size="lg" onClick={this.handleReturnBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Return</Button>
-                    : 
                     <Button color="warning" size="lg" disabled={disabledButton} onClick={this.handleBorrowBook} style={{ position : 'absolute', width : 'auto', top : '550px', left: '1150px' }}>Borrow</Button>
-                    }
-
                 <Container>
                 <div className="badge badge-warning" style={{  position:'absolute',top: '410px', }}>{this.state.book.genre}</div>
                 <p className={classStatus} style={{ position : 'absolute',
@@ -218,7 +199,7 @@ class DetailBook extends Component {
                 <div>
                     <p className={detailStyle.description}> {this.state.book.description} </p>
                 </div>
-                <ModalEdit modalEditShow={this.state.showModalUpdate} toggle={toggleEdit} data={this.state.book} {...this.props} />
+                <ModalEdit modalEditShow={this.state.showModalUpdate} toggle={toggleEdit} {...this.props} />
                 </Container>
             </div>
             </Container>    
@@ -226,4 +207,8 @@ class DetailBook extends Component {
     }
 }
 
-export default DetailBook;
+const mapStateToProps = state => ({
+    book : state.book,
+    auth : state.auth
+})
+export default connect(mapStateToProps)(DetailBook);

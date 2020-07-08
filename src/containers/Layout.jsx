@@ -13,7 +13,7 @@ const Layout = (props) => {
       <Container fluid>
         <Row>
         <Col md={3} id="sidebar-wrapper" style={{ marginRight: '-15px' }}>
-          <Sidebar/>
+          <Sidebar {...props} />
         </Col>
         <Col md={9} id="page-content-wrapper">
             <Navbar {...props} />

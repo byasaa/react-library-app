@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom';
-import axios from 'axios'
 import QueryString from "query-string"
-import {Col, Card, CardImg, CardBody, Button,Row} from "reactstrap"
+import { connect } from "react-redux";
+import {Col, Card, CardImg, CardBody, Button} from "reactstrap"
+import { getBook } from '../redux/actions/book';
 
 class Books extends Component {
     constructor(props){
@@ -11,47 +12,42 @@ class Books extends Component {
             books : [],
             page : 1
         }
+        console.log(this.state)
     }
-    getAllBook = () => {
+    getAllBook = async () => {
         let qs = QueryString.parse(this.props.location.search)
         let search = qs.search || ""
-        let limit = qs.limit || ""
+        let limit = qs.limit || "4"
         let page = qs.page || ""
         let order = qs.orderBy || "created_at"
         let sort = qs.sort || "DESC"
-        const token = localStorage.getItem('token')
-        axios({
-            method : 'GET',
-            url: `${process.env.REACT_APP_API_URL}books?search=${search}&limit=4&page=${page}&orderBy=${order}&sort=${sort}`,
-            headers : {
-                Authorization : token
-            }
-        })
-        .then((res)=>{
+        const token = this.props.auth.data.token
+        await this.props.dispatch(getBook(search, limit, page, order, sort, token))
+        .then(() => {
             this.setState({
-                books: res.data.data
+                books  : this.props.book.data
             })
         })
         .catch((err) => {
             console.log(err)
         })
     }
-//     nextPage = (e) => {
-//         let qs = QueryString.parse(this.props.location.search)
-//         e.preventDefault()
-//         this.setState({
-//             page: +qs.page + 1
-//         })
-//         this.props.history.push(`/?page=${this.state.page}`)
-//     }
-//    prevPage = (e) => {
-//     let qs = QueryString.parse(this.props.location.search)
-//         e.preventDefault()
-//         this.setState({
-//             page: +qs.page - 1
-//         })
-//         this.props.history.push(`/?page=${this.state.page}`)
-//     }
+    nextPage = (e) => {
+        let qs = QueryString.parse(this.props.location.search)
+        e.preventDefault()
+        this.setState({
+            page: +qs.page + 1
+        })
+        this.props.history.push(`/?page=${this.state.page}`)
+    }
+   prevPage = (e) => {
+    let qs = QueryString.parse(this.props.location.search)
+        e.preventDefault()
+        this.setState({
+            page: +qs.page - 1
+        })
+        this.props.history.push(`/?page=${this.state.page}`)
+    }
     componentDidMount(){
         this.getAllBook()
     }
@@ -62,8 +58,8 @@ class Books extends Component {
     }
     render(){
         let qs = QueryString.parse(this.props.location.search)
-        qs.page = qs.page ||  1
-        let disableButton = qs.page == 1 ? true : false
+        qs.page = qs.page ||  '1'
+        let disableButton = qs.page === '1' ? true : false
         return(
             <>
             {
@@ -90,4 +86,9 @@ class Books extends Component {
         )
     }
 }
-export default Books
+
+const mapStateToProps = (state) => ({
+    auth : state.auth,
+    book : state.book
+})
+export default connect(mapStateToProps)(Books)
