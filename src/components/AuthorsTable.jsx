@@ -76,7 +76,7 @@ class AuthorsTable extends Component {
                                     <th>#</th>
                                     <th>Author</th>
                                     <th>
-                                        <Button color="primary">Add Author</Button>
+                                        <Button onClick={() => this.props.history.push('/genre/create')} color="primary">Add Author</Button>
                                     </th>
                                 </tr>
                             </thead>
@@ -86,7 +86,7 @@ class AuthorsTable extends Component {
                                 <th scope="row">{i++}</th>
                                     <td>{author.name}</td>
                                     <td>
-                                        <Button className="mr-3" color="success" >Edit</Button>
+                                        <Button className="mr-3" onClick={() => this.props.history.push(`/author/edit/`+author.id)} color="success" >Edit</Button>
                                         <Button color="danger" onClick={() => this.handleDeleteAuthor(author.id)}>Delete</Button>
                                     </td>
                                 </tr>

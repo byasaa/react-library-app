@@ -76,7 +76,7 @@ class GenresTable extends Component {
                                     <th>#</th>
                                     <th>Genre</th>
                                     <th>
-                                        <Button color="primary">Add Genre</Button>
+                                        <Button onClick={() => this.props.history.push('/genre/create')} color="primary">Add Genre</Button>
                                     </th>
                                 </tr>
                             </thead>
@@ -86,7 +86,7 @@ class GenresTable extends Component {
                                 <th scope="row">{i++}</th>
                                     <td>{genre.name}</td>
                                     <td>
-                                        <Button className="mr-3" color="success" >Edit</Button>
+                                        <Button className="mr-3" onClick={() => this.props.history.push('/author/edit/'+genre.id)} color="success" >Edit</Button>
                                         <Button color="danger" onClick={() => this.handleDeleteAuthor(genre.id)}>Delete</Button>
                                     </td>
                                 </tr>
