@@ -68,7 +68,7 @@ class Modals extends Component {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: err,
+            text: 'Only images are allowed',
           })
         })
       }

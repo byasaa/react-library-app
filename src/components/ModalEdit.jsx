@@ -24,17 +24,16 @@ class ModalEdit extends Component {
   getDetailBook = async () => {
     const token = this.props.auth.data.token
     const id = this.props.match.params.id
-    console.log(id)
     await this.props.dispatch(getDetailBook(id, token))
     .then(() => {
       this.setState({
-          title : this.props.book.data.title,
-          description : this.props.book.data.description,
-          author : this.props.book.data.author_id,
-          genre : this.props.book.data.genre_id,
-          image : process.env.REACT_APP_API_URL + 'img/' + this.props.book.data.image,
-          status : this.props.book.data.status
-      })
+        title : this.props.book.data.title,
+        description : this.props.book.data.description,
+        author : this.props.book.data.author_id,
+        genre : this.props.book.data.genre_id,
+        image : process.env.REACT_APP_API_URL + 'img/' + this.props.book.data.image,
+        status : this.props.book.data.status
+    }) 
     })
   }
   getAuthor = () => {
@@ -88,7 +87,7 @@ class ModalEdit extends Component {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: err,
+        text: 'Only images are allowed',
       })
      })
    }
