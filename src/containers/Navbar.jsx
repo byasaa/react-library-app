@@ -50,8 +50,8 @@ function NavBar (props) {
                 </Input>
                 <Input type="select" name="sort" onChange={(e) => setSort(e.target.value)} value={sort}>
                   <option value="">---Sort---</option>
-                  <option value="asc">ASC</option>
-                  <option value="desc">DESC</option>
+                  <option value="asc">A-Z</option>
+                  <option value="desc">Z-A</option>
                 </Input>
               <Input type="hidden" name="page" value={1} />
                 <Button color="warning" onClick={()=> filter()}>Filter</Button>

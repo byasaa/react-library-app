@@ -44,7 +44,7 @@ class Books extends Component {
         if (this.props.location.search === ""){
             this.props.history.push(`/?page=${parseInt(qs.page)+1}`)
           } else {
-            if (qs.page){
+            if (qs.page >= 1){
               const url = this.props.location.search.replace(`page=${qs.page}`, `page=${parseInt(qs.page)+1}`)
               this.props.history.push(url)
             }else {
