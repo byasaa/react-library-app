@@ -1,8 +1,8 @@
 const initialState = {
-    data : [],
-    isLoading : false,
-    isError : false,
-    isSuccess : false
+    data: [],
+    isLoading: false,
+    isError: false,
+    isSuccess: false
 }
 
 const author = (state = initialState, action) => {
@@ -11,115 +11,115 @@ const author = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                isError: false,
-                isSuccess : false
+                    isError: false,
+                    isSuccess: false
             }
-        case 'GET_GENRE_REJECTED' :
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-                isSuccess : false
-            }
-        case 'GET_GENRE_FULFILLED' :
-            console.log(action.payload.data)
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false,
-                data : action.payload.data.data
-            }
-        case 'GET_DETAIL_GENRE_PENDING':
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false
-            }
-        case 'GET_DETAIL_GENRE_REJECTED' :
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-                isSuccess : false
-            }
-        case 'GET_DETAIL_GENRE_FULFILLED' :
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false,
-                data : action.payload.data.data[0]
-            }
-        case 'POST_ADD_GENRE_PENDING':
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false
-            }
-        case 'POST_ADD_GENRE_REJECTED' :
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-                isSuccess : false
-            }
-        case 'POST_ADD_GENRE_FULFILLED' :
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false,
-                data : action.payload.data.data[0]
-            }
-        case 'PUT_UPDATE_GENRE_PENDING':
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false
-            }
-        case 'PUT_UPDATE_GENRE_REJECTED' :
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-                isSuccess : false
-            }
-        case 'PUT_UPDATE_GENRE_FULFILLED' :
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false,
-                data : action.payload.data.data[0]
-            }
-        case 'DELETE_GENRE_PENDING':
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false
-            }
-        case 'DELETE_GENRE_REJECTED' :
-            return {
-                ...state,
-                isLoading: false,
-                isError: true,
-                isSuccess : false
-            }
-        case 'DELETE_GENRE_FULFILLED' :
-            return {
-                ...state,
-                isLoading: true,
-                isError: false,
-                isSuccess : false,
-                data : action.payload.data.data[0]
-            }
-        default:
-            return state;
+            case 'GET_GENRE_REJECTED':
+                return {
+                    ...state,
+                    isLoading: false,
+                        isError: true,
+                        isSuccess: false
+                }
+                case 'GET_GENRE_FULFILLED':
+                    console.log(action.payload.data)
+                    return {
+                        ...state,
+                        isLoading: true,
+                            isError: false,
+                            isSuccess: false,
+                            data: action.payload.data.data
+                    }
+                    case 'GET_DETAIL_GENRE_PENDING':
+                        return {
+                            ...state,
+                            isLoading: true,
+                                isError: false,
+                                isSuccess: false
+                        }
+                        case 'GET_DETAIL_GENRE_REJECTED':
+                            return {
+                                ...state,
+                                isLoading: false,
+                                    isError: true,
+                                    isSuccess: false
+                            }
+                            case 'GET_DETAIL_GENRE_FULFILLED':
+                                return {
+                                    ...state,
+                                    isLoading: true,
+                                        isError: false,
+                                        isSuccess: false,
+                                        data: action.payload.data.data[0]
+                                }
+                                case 'POST_ADD_GENRE_PENDING':
+                                    return {
+                                        ...state,
+                                        isLoading: true,
+                                            isError: false,
+                                            isSuccess: false
+                                    }
+                                    case 'POST_ADD_GENRE_REJECTED':
+                                        return {
+                                            ...state,
+                                            isLoading: false,
+                                                isError: true,
+                                                isSuccess: false
+                                        }
+                                        case 'POST_ADD_GENRE_FULFILLED':
+                                            return {
+                                                ...state,
+                                                isLoading: true,
+                                                    isError: false,
+                                                    isSuccess: false,
+                                                    data: action.payload.data.data[0]
+                                            }
+                                            case 'PUT_UPDATE_GENRE_PENDING':
+                                                return {
+                                                    ...state,
+                                                    isLoading: true,
+                                                        isError: false,
+                                                        isSuccess: false
+                                                }
+                                                case 'PUT_UPDATE_GENRE_REJECTED':
+                                                    return {
+                                                        ...state,
+                                                        isLoading: false,
+                                                            isError: true,
+                                                            isSuccess: false
+                                                    }
+                                                    case 'PUT_UPDATE_GENRE_FULFILLED':
+                                                        return {
+                                                            ...state,
+                                                            isLoading: true,
+                                                                isError: false,
+                                                                isSuccess: false,
+                                                                data: action.payload.data.data[0]
+                                                        }
+                                                        case 'DELETE_GENRE_PENDING':
+                                                            return {
+                                                                ...state,
+                                                                isLoading: true,
+                                                                    isError: false,
+                                                                    isSuccess: false
+                                                            }
+                                                            case 'DELETE_GENRE_REJECTED':
+                                                                return {
+                                                                    ...state,
+                                                                    isLoading: false,
+                                                                        isError: true,
+                                                                        isSuccess: false
+                                                                }
+                                                                case 'DELETE_GENRE_FULFILLED':
+                                                                    return {
+                                                                        ...state,
+                                                                        isLoading: true,
+                                                                            isError: false,
+                                                                            isSuccess: false,
+                                                                            data: action.payload.data.data[0]
+                                                                    }
+                                                                    default:
+                                                                        return state;
     }
 }
 
